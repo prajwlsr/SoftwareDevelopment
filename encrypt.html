@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Communication System</title>
+    
+    
+</head>
+<body>
+    <div class="container">
+      
+    <h2>Secure Messenger</h2>
+        <textarea id="message" placeholder="enter message"></textarea>
+        <textarea id="encryptmessage" placeholder="enter encrypted message"></textarea>
+        <button onclick="encryptMessage()">Encrypt</button>
+        <button onclick="decryptMessage()">Decrypt</button>
+        
+        <style>
+          body {
+              font-family: Arial, sans-serif;
+              background-color:skyblue;
+              text-align: center;
+          }
+          .container {
+              width: 350px;
+              margin: 200px auto;
+              padding: 25px;
+              background-color: white;
+              border-radius: 20px;
+              box-shadow: 5px 5px 10px black;
+          }
+          input, textarea {
+              width: 70%;
+              margin: 10px 0;
+              padding: 10px;
+          }
+          button {
+              background-color: #007BFF;
+              width: 40%;
+              padding: 10px;
+              border-radius: 25px;
+              color: white;
+              border: none;
+              cursor: pointer;
+              display: block;  
+              margin: 10px auto;
+          }
+          button:hover {
+              background-color: #0056b3;
+          }
+
+          p {
+               width: 100%; 
+               word-wrap: break-word;
+               white-space: normal; 
+}
+      </style>
+        <p id="output"></p>
+    </div>
+    
+    <script>
+
+        function encryptMessage() {
+            let message = document.getElementById("message").value;
+            const token = localStorage.getItem('authToken');
+          
+            fetch("/encrypt", {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ message })
+            }).then(res => res.json()).then(data => {
+                document.getElementById("output").innerText = "Encrypted: " + data.encrypted_message;
+            });
+        }
+        
+        function decryptMessage() {
+            let encryptedMessage = document.getElementById("encryptmessage").value;
+            const token = localStorage.getItem('authToken');
+            fetch("/decrypt", {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ encrypted_message: encryptedMessage })
+            }).then(res => res.json()).then(data => {
+                document.getElementById("output").innerText = "Decrypted: " + data.decrypted_message;
+            });
+        }
+        </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Communication System</title>
+    
+</head>
+<body>
+    <div class="container">
+        <h2>signin</h2>
+        
+        <input type="text" id="username" placeholder="Username">
+        <input type="email" id="email" placeholder="Enter your email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="signin()">sign in</button>
+        <h3>Already have an account?</h3>
+        <button onclick="window.location.href='login.html'">login</button>
+        
+        
+        <p id="output"></p>
+        
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            background-color: skyblue;
+            text-align: center;
+          }
+          .container {
+            width: 350px;
+            margin: 150px auto;
+            padding: 25px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 5px 5px 10px black;
+          }
+          input, textarea {
+            width: 90%;
+            margin: 10px ;
+            padding: 5px;
+            font-weight: lighter;
+            font-size: small;
+            font-style: calc();
+          }
+          h3{
+             font-size: x-small;
+             font-weight: lighter;
+             margin-top: 10px;
+             margin-bottom: 10px;
+          }
+          button {
+            background-color: #007BFF;
+            width: 60px;
+            height: 30px;
+            border-radius: 25px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 10px auto;
+          }
+      
+          </style>
+      </div>
+      <script>
+        
+function signin() {
+  let username = document.getElementById("username").value;
+  let password = document.getElementById("password").value;
+  let email = document.getElementById("email").value;
+  
+  fetch("/signin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password, email })
+  }).then(res => res.json()).then(data => {
+      if (data.token) {
+          token = data.token;
+          alert("signin successful!");
+          window.location.href='encrypt.html'
+            
+          localStorage.setItem('authToken', token)
+      } else {
+          alert("signin failed");
+      }
+  });
+}
+      </script>
+</html>

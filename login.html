@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Communication System</title>
+    
+</head>
+<body>
+    <div class="container">
+      <div class="button">
+        <h2>Login Form</h2>
+        <input type="text" id="username" placeholder="Username" value="">
+        <input type="password" id="password" placeholder="Password" value="">
+        
+        <button onclick="login()">login</button>       
+        <h3>if account not created?</h3>
+        <button onclick="window.location.href='signin.html'">Sign in</button>
+        
+        <p id="output"></p>
+        
+        <style>
+            body {
+            font-family: Arial, sans-serif;
+            background-color: skyblue;
+            text-align: center;
+          }
+          
+          .container {
+            width: 350px;
+            margin: 200px auto;
+            padding: 25px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 5px 5px 10px black;
+          }
+          input, textarea {
+            width: 90%;
+            margin: 10px 0px;
+            padding: 10px;
+          }
+          button {
+            background-color: #007BFF;
+            width: 60px;
+            height: 30px;
+            border-radius: 25px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 10px auto;
+          }
+          head, h3{
+             font-size: x-small;
+             font-weight: lighter;
+             margin-top: 10px;
+             margin-bottom: 10px;
+          }
+          
+          </style>
+          
+
+      </div>
+    <script>
+      let token = "";
+
+
+function login() {
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+
+    fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+    }).then(res => res.json()).then(data => {
+        if (data.token) {
+            token = data.token;
+            alert("Login successful!");
+            window.location.href='encrypt.html'
+            
+            localStorage.setItem('authToken', token)
+        } else {
+            alert("Login failed", data.message);
+        }
+    });
+}
+    </script>
+</body>
+</html>
+
+
